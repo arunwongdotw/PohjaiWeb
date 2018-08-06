@@ -2,7 +2,9 @@
   session_start();
   include "../dbphp/connect.php";
   if ($_SESSION) {
-    ?><script>window.location="../pages/member.php";</script><?php
+    if ($_SESSION["type"] == "member") {
+      ?><script>window.location="../pages/member.php";</script><?php
+    }
   }
   if ($_REQUEST["action"] == "login") {
     $username = $_REQUEST["username"];
@@ -14,6 +16,7 @@
       $queryCheckPassword = mysql_query($sqlCheckPassword);
       if ($resultCheckPassword = mysql_fetch_array($queryCheckPassword)) {
         $_SESSION = $resultCheckPassword;
+        $_SESSION["type"] = "member";
         ?><script>window.location="../pages/member.php";</script><?php
       } else {
         echo "<script type='text/javascript'>alert('Password ไม่ถูกต้อง');</script>";
@@ -47,7 +50,7 @@
         </div>
         <div class="fl_right">
           <ul class="nospace">
-            <?php if ($_SESSION) { ?>
+            <?php if ($_SESSION["type"] == "member") { ?>
             <li><i class="fas fa-user rgtspace-5"> ยินดีต้อนรับ <?php echo $_SESSION["member_username"]; ?></i>
             <li><i class="fas fa-sign-out-alt rgtspace-5"></i><a href="login.php?action=logout"> Log Out</a></li>
             <?php } else { ?>

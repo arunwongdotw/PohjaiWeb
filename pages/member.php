@@ -3,6 +3,10 @@
   include "../dbphp/connect.php";
   if (!$_SESSION) {
     ?><script>window.location="../pages/login.php";</script><?php
+  } else {
+    if ($_SESSION["type"] != "member") {
+      ?><script>window.location="../pages/login.php";</script><?php
+    }
   }
   if ($_REQUEST["action"] == "logout") {
     session_destroy();

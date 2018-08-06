@@ -1,7 +1,7 @@
 <?php
   session_start();
   include "../dbphp/connect.php";
-  if ($_SESSION) {
+  if ($_SESSION["type"] == "ad") {
     ?><script>window.location="../pages/addetail.php";</script><?php
   }
   if ($_REQUEST["action"] == "adlogin") {
@@ -14,6 +14,7 @@
       $queryCheckPassword = mysql_query($sqlCheckPassword);
       if ($resultCheckPassword = mysql_fetch_array($queryCheckPassword)) {
         $_SESSION = $resultCheckPassword;
+        $_SESSION["type"] = "ad";
         ?><script>window.location="../pages/addetail.php";</script><?php
       } else {
         echo "<script type='text/javascript'>alert('Password ไม่ถูกต้อง');</script>";

@@ -1,7 +1,7 @@
 <?php
   session_start();
   include "../dbphp/connect.php";
-  if (!$_SESSION["ma_username"]) {
+  if ($_SESSION["type"] != "ad") {
     ?><script>window.location="../pages/adlogin.php";</script><?php
   } else {
     $ref = $_SESSION["ma_username"];
@@ -35,7 +35,7 @@
         </div>
         <div class="fl_right">
           <ul class="nospace">
-            <?php if ($_SESSION["ma_username"]) { ?>
+            <?php if ($_SESSION["type"] != "ad") { ?>
             <li><i class="fas fa-user rgtspace-5"> ยินดีต้อนรับ <?php echo $_SESSION["ma_username"]; ?></i>
             <li><i class="fas fa-sign-out-alt rgtspace-5"></i><a href="addetail.php?action=logout"> Log Out</a></li>
             <?php } else { ?>

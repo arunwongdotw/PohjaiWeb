@@ -1,35 +1,6 @@
 <?php
   session_start();
   include "../dbphp/connect.php";
-  if (!$_SESSION) {
-    ?><script>window.location="../pages/member.php";</script><?php
-  }
-  if ($_REQUEST["action"] == "logout") {
-    session_destroy();
-    echo "<script type='text/javascript'>alert('Log Out สำเร็จ');</script>";
-    ?><script>window.location="../index.html";</script><?php
-  }
-  if (!$_REQUEST["questionsetid"]) {
-    ?><script>window.location="../pages/member.php";</script><?php
-  } else {
-    if ($_REQUEST["name"]) {
-      $nameflag = 1;
-      $questionsetid = $_REQUEST["questionsetid"];
-      $startdatetime = $_REQUEST["startdatetime"];
-      $enddatetime = $_REQUEST["enddatetime"];
-      $sqlGetList = "SELECT * FROM info WHERE info_question_set_id = '$questionsetid' AND info_datetime >= '$startdatetime' AND info_datetime <= '$enddatetime' ORDER BY info_id";
-      $queryGetList = mysql_query($sqlGetList);
-    } else {
-      $nameflag = 0;
-      $questionsetid = $_REQUEST["questionsetid"];
-      $ansbqid = $_REQUEST["ansbqid"];
-      $startdatetime = $_REQUEST["startdatetime"];
-      $enddatetime = $_REQUEST["enddatetime"];
-      $sqlGetList = "SELECT * FROM answer a, info i WHERE a.ans_bq_id = '$ansbqid' AND i.info_datetime >= '$startdatetime' AND i.info_datetime <= '$enddatetime'
-                    AND a.ans_info_id = i.info_id  ORDER BY i.info_datetime";
-      $queryGetList = mysql_query($sqlGetList);
-    }
-  }
 ?>
 <html lang="">
   <!-- To declare your language - read more here: https://www.w3.org/International/questions/qa-html-language-declarations -->
@@ -81,7 +52,7 @@
     <div class="wrapper row3">
       <section class="hoc container clear">
         <div class="sectiontitle">
-          <h6 class="heading">รายชื่อผู้ตอบแบบสอบถามความพึงพอใจ</h6>
+          <h6 class="heading">เกี่ยวกับเรา</h6>
         </div>
       </section>
     </div>
