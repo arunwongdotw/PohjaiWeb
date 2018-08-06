@@ -1,36 +1,11 @@
 <?php
   session_start();
   include "../dbphp/connect.php";
-  if ($_REQUEST["action"] == "addowner") {
-    $name = $_REQUEST["oname"];
-    $contact = $_REQUEST["ocontact"];
-    $address = $_REQUEST["oaddress"];
-    $province = $_REQUEST["oprovince"];
-    $mobile = $_REQUEST["omobile"];
-    $username = $_REQUEST["omausername"];
-    $sqlCheck = "SELECT * FROM memberAd WHERE ma_username = '$username'";
-    $queryCheck = mysql_query($sqlCheck);
-    $numRow = mysql_num_rows($queryCheck);
-    $sqlGetID = "SELECT * FROM memberAd WHERE ma_username = '$username'";
-    $queryGetID = mysql_query($sqlGetID);
-    $resultGetID = mysql_fetch_array($queryGetID);
-    $maid = $resultGetID["ma_id"];
-    $datetime = date('Y-m-d H:i:s');
-    if ($numRow > 0) {
-      $sqlInsert = "INSERT INTO owner VALUES ('', '$name', '$contact', '$address', '$province', '$mobile', '$maid', '$datetime')";
-      if (mysql_query($sqlInsert)) {
-        echo "<script type='text/javascript'>alert('เพิ่มเจ้าของโฆษณาสำเร็จ');</script>";
-        ?><script>window.location="addowner.php";</script><?php
-      } else {
-        echo "<script type='text/javascript'>alert('เพิ่มเจ้าของโฆษณาไม่สำเร็จ');</script>";
-        ?><script>window.location="addowner.php";</script><?php
-      }
-    } else {
-      echo "<script type='text/javascript'>alert('ไม่พบ Username นี้ในระบบ');</script>";
-    }
+  if ($_REQUEST["action"] == "search") {
+    $mafirstname = $_REQUEST["mafirstname"];
+    $sqlSelect = "SELECT * FROM memberAd WHERE ma_firstname LIKE '%$mafirstname%'";
+    $querySelect = mysql_query($sqlSelect);
   }
-  $sqlGetProvince = "SELECT * FROM province ORDER BY PROVINCE_ID";
-  $queryGetProvince = mysql_query($sqlGetProvince);
 ?>
 <html lang="">
   <!-- To declare your language - read more here: https://www.w3.org/International/questions/qa-html-language-declarations -->
@@ -77,43 +52,47 @@
     <div class="wrapper row3">
       <section class="hoc container clear">
         <div class="sectiontitle" style="margin-top: 50px;">
-          <h6 class="heading">เพิ่มร้านโฆษณา</h6>
+          <h6 class="heading">ค้นหาผู้ขายโฆษณา</h6>
         </div>
-        <form method="post" action="addowner.php?action=addowner">
-          <div style="margin-left: 50px;">
-            <div class="one_half first">
-              ชื่อร้าน :
-              <input type="text" name="oname" class="form-control" style="margin-left: 40px; display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px; width: 170px;"><br>
-            </div>
-            <div class="one_half">
-              ชื่อผู้ติดต่อ :
-              <input type="text" name="ocontact" class="form-control" style="margin-left: 64px; display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px; width: 170px;"><br>
-            </div>
-            <div class="one_half first" style="margin-top: 20px;">
-              ที่อยู่ :
-              <input type="text" name="oaddress" class="form-control" style="margin-left: 52px; display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px; width: 400px;"><br>
-            </div>
-            <div class="one_half" style="margin-top: 20px;">
-              จังหวัด :
-              <select name="oprovince" id="province" class="form-control" style="margin-left: 84px; display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px; width: 170px;">
-                <?php while ($resultGetProvince = mysql_fetch_array($queryGetProvince)) { ?>
-                <option value="<?php echo $resultGetProvince["PROVINCE_NAME"]; ?>"><?php echo $resultGetProvince["PROVINCE_NAME"]; ?></option>
-                <?php } ?>
-              </select>
-            </div>
-            <div class="one_half first" style="margin-top: 20px;">
-              เบอร์โทรศัพท์ :
-              <input type="text" name="omobile" class="form-control" style="display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px; width: 170px;"><br>
-            </div>
-            <div class="one_half" style="margin-top: 20px;">
-              Username ผู้ขายได้ :
-              <input type="text" name="omausername" class="form-control" style="display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px; width: 170px;"><br>
-            </div>
-          </div>
+        <form method="post" action="seesalelist.php?action=search">
           <center>
-            <input class="btn" type="submit" style="margin-top: 100px;" value="ตกลง">
+            ชื่อผู้ขาย : <input type="text" class="form-control" name="mafirstname" style="border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px;"><br>
+            <input class="btn" type="submit" value="ค้นหา">
           </center>
         </form>
+        <?php if ($_REQUEST["action"] == "search") {?>
+          <table style="margin-top: 50px;">
+            <thead>
+              <tr>
+                <th>ชื่อ - นามสกุล</th>
+                <th>อำเภอ</th>
+                <th>จังหวัด</th>
+                <th>เบอร์โทรศัพท์</th>
+                <th>อีเมล</th>
+                <th>จำนวนร้านที่ขายได้</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php while ($resultSelect = mysql_fetch_array($querySelect)) { ?>
+              <tr>
+                <td><?php echo $resultSelect["ma_firstname"] . " " . $resultSelect["ma_lastname"]; ?></td>
+                <td><?php echo $resultSelect["ma_amphur"]; ?></td>
+                <td><?php echo $resultSelect["ma_province"]; ?></td>
+                <td><?php echo $resultSelect["ma_mobile"]; ?></td>
+                <td><?php echo $resultSelect["ma_email"]; ?></td>
+                <?php
+                $maid = $resultSelect["ma_id"];
+                $sqlCount = "SELECT count(owner_id) as countrow FROM owner WHERE owner_ma_id = '$maid'";
+                $queryCount = mysql_query($sqlCount);
+                $resultCount = mysql_fetch_array($queryCount);
+                $countrow = $resultCount["countrow"];
+                ?>
+                <td><a href="seeshopfromsale.php?maid=<?php echo $maid; ?>"><?php echo $countrow; ?></a></td>
+              </tr>
+              <?php } ?>
+            </tbody>
+          </table>
+        <?php } ?>
       </section>
     </div>
     <div class="wrapper row2">
@@ -145,21 +124,5 @@
     <script src="../layout/scripts/jquery.min.js"></script>
     <script src="../layout/scripts/jquery.backtotop.js"></script>
     <script src="../layout/scripts/jquery.mobilemenu.js"></script>
-    <script type="text/javascript">
-      $(function() {
-        $("#username").keypress(function(event) {
-          var ew = event.which;
-          if (ew == 32)
-            return true;
-          if (48 <= ew && ew <= 57)
-            return true;
-          if (65 <= ew && ew <= 90)
-            return true;
-          if (97 <= ew && ew <= 122)
-            return true;
-          return false;
-        });
-      });
-    </script>
   </body>
 </html>
