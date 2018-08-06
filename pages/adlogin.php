@@ -1,6 +1,9 @@
 <?php
   session_start();
-  include "../connect.php";
+  include "../dbphp/connect.php";
+  if ($_SESSION) {
+    ?><script>window.location="../pages/addetail.php";</script><?php
+  }
   if ($_REQUEST["action"] == "adlogin") {
     $username = $_REQUEST["username"];
     $password = $_REQUEST["password"];

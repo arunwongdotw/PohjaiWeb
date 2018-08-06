@@ -1,6 +1,6 @@
 <?php
   session_start();
-  include "../connect.php";
+  include "../dbphp/connect.php";
   if ($_REQUEST["ref"]) {
     $ref = $_REQUEST["ref"];
   }
@@ -15,17 +15,25 @@
     $email = $_REQUEST["email"];
     $ref = $_REQUEST["ref"];
     $datetime = date('Y-m-d H:i:s');
-    if ($ref) {
-      $sqlInsert = "INSERT INTO memberAd VALUES ('', '$username', '$password', '$firstname', '$lastname', '$province', '$amphur', '$mobile', '$email', '$ref', '0', '$datetime')";
-    } else {
-      $sqlInsert = "INSERT INTO memberAd VALUES ('', '$username', '$password', '$firstname', '$lastname', '$province', '$amphur', '$mobile', '$email', '-', '0', '$datetime')";
-    }
-    if (mysql_query($sqlInsert)) {
-      echo "<script type='text/javascript'>alert('ลงทะเบียนผู้ขายโฆษณาสำเร็จ');</script>";
-      ?><script>window.location="sale.php";</script><?php
-    } else {
-      echo "<script type='text/javascript'>alert('ลงทะเบียนผู้ขายโฆษณาไม่สำเร็จ');</script>";
+    $sqlCheck = "SELECT * FROM memberAd WHERE ma_username = '$username'";
+    $queryCheck = mysql_query($sqlCheck);
+    $numRow = mysql_num_rows($queryCheck);
+    if ($numRow > 0) {
+      echo "<script type='text/javascript'>alert('พบ Username นี้มีอยู่ในระบบ');</script>";
       ?><script>window.location="register.php";</script><?php
+    } else {
+      if ($ref) {
+        $sqlInsert = "INSERT INTO memberAd VALUES ('', '$username', '$password', '$firstname', '$lastname', '$province', '$amphur', '$mobile', '$email', '$ref', '0', '$datetime')";
+      } else {
+        $sqlInsert = "INSERT INTO memberAd VALUES ('', '$username', '$password', '$firstname', '$lastname', '$province', '$amphur', '$mobile', '$email', '-', '0', '$datetime')";
+      }
+      if (mysql_query($sqlInsert)) {
+        echo "<script type='text/javascript'>alert('ลงทะเบียนผู้ขายโฆษณาสำเร็จ');</script>";
+        ?><script>window.location="sale.php";</script><?php
+      } else {
+        echo "<script type='text/javascript'>alert('ลงทะเบียนผู้ขายโฆษณาไม่สำเร็จ');</script>";
+        ?><script>window.location="register.php";</script><?php
+      }
     }
   }
   $sqlGetProvince = "SELECT * FROM province ORDER BY PROVINCE_ID";
@@ -236,7 +244,7 @@
           if (province_name) {
             $.ajax({
               type:'POST',
-              url:'../get-amphur.php',
+              url:'../dbphp/get-amphur.php',
               data:'province_name=' + province_name,
               success:function(html) {
                 $('#amphur').html(html);
@@ -272,21 +280,21 @@
 
         function check_username_ajax(username) {
           $("#user-result").html('<img src="../images/ajax-loader.gif" />');
-          $.post('../username-checker.php', {'username':username}, function(data) {
+          $.post('../dbphp/username-checker.php', {'username':username}, function(data) {
             $("#user-result").html(data);
           });
         }
 
         function check_password_ajax(pass) {
           $("#pass-result").html('<img src="../images/ajax-loader.gif" />');
-          $.post('../password-checker.php', {'password':pass}, function(data) {
+          $.post('../dbphp/password-checker.php', {'password':pass}, function(data) {
             $("#pass-result").html(data);
           });
         }
 
         function check_cfmpassword_ajax(pass, cfm_pass) {
           $("#cfmpass-result").html('<img src="../images/ajax-loader.gif" />');
-          $.post('../cfmpassword-checker.php', {'password':pass, 'cfmpassword': cfm_pass}, function(data) {
+          $.post('../dbphp/cfmpassword-checker.php', {'password':pass, 'cfmpassword': cfm_pass}, function(data) {
             $("#cfmpass-result").html(data);
           });
         }

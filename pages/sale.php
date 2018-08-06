@@ -1,6 +1,6 @@
 <?php
   session_start();
-  include "../connect.php";
+  include "../dbphp/connect.php";
   $sqlGetRecentMemberScore = "SELECT * FROM (SELECT m.member_id, m.member_username, max(s.score_datetime) AS score_datetime FROM member m, questionSet qs, question q, score s
                         WHERE m.member_id = qs.question_set_member_id AND qs.question_set_id = q.question_question_set_id AND q.question_id = s.score_question_id
                         GROUP BY m.member_username) a ORDER BY a.score_datetime DESC";

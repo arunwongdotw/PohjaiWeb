@@ -1,20 +1,36 @@
 <?php
   session_start();
   include "../dbphp/connect.php";
-  if (!$_SESSION["ma_username"]) {
-    ?><script>window.location="../pages/adlogin.php";</script><?php
-  } else {
-    $ref = $_SESSION["ma_username"];
-    $sqlGetRef1 = "SELECT * FROM memberAd WHERE ma_ref = '$ref' ORDER BY ma_id";
-    $queryGetRef1 = mysql_query($sqlGetRef1);
-    $sqlGetRef2 = "SELECT * FROM memberAd WHERE ma_ref IN (SELECT ma_username FROM memberAd WHERE ma_ref = '$ref')";
-    $queryGetRef2 = mysql_query($sqlGetRef2);
+  if ($_REQUEST["action"] == "addowner") {
+    $name = $_REQUEST["oname"];
+    $contact = $_REQUEST["ocontact"];
+    $address = $_REQUEST["oaddress"];
+    $province = $_REQUEST["oprovince"];
+    $mobile = $_REQUEST["omobile"];
+    $username = $_REQUEST["omausername"];
+    $sqlCheck = "SELECT * FROM memberAd WHERE ma_username = '$username'";
+    $queryCheck = mysql_query($sqlCheck);
+    $numRow = mysql_num_rows($queryCheck);
+    $sqlGetID = "SELECT * FROM memberAd WHERE ma_username = '$username'";
+    $queryGetID = mysql_query($sqlGetID);
+    $resultGetID = mysql_fetch_array($queryGetID);
+    $maid = $resultGetID["ma_id"];
+    $datetime = date('Y-m-d H:i:s');
+    if ($numRow > 0) {
+      $sqlInsert = "INSERT INTO owner VALUES ('', '$name', '$contact', '$address', '$province', '$mobile', '$maid', '$datetime')";
+      if (mysql_query($sqlInsert)) {
+        echo "<script type='text/javascript'>alert('เพิ่มเจ้าของโฆษณาสำเร็จ');</script>";
+        ?><script>window.location="addowner.php";</script><?php
+      } else {
+        echo "<script type='text/javascript'>alert('เพิ่มเจ้าของโฆษณาไม่สำเร็จ');</script>";
+        ?><script>window.location="addowner.php";</script><?php
+      }
+    } else {
+      echo "<script type='text/javascript'>alert('ไม่พบ Username นี้ในระบบ');</script>";
+    }
   }
-  if ($_REQUEST["action"] == "logout") {
-    session_destroy();
-    echo "<script type='text/javascript'>alert('Log Out สำเร็จ');</script>";
-    ?><script>window.location="../pages/sale.php";</script><?php
-  }
+  $sqlGetProvince = "SELECT * FROM province ORDER BY PROVINCE_ID";
+  $queryGetProvince = mysql_query($sqlGetProvince);
 ?>
 <html lang="">
   <!-- To declare your language - read more here: https://www.w3.org/International/questions/qa-html-language-declarations -->
@@ -35,13 +51,8 @@
         </div>
         <div class="fl_right">
           <ul class="nospace">
-            <?php if ($_SESSION["ma_username"]) { ?>
-            <li><i class="fas fa-user rgtspace-5"> ยินดีต้อนรับ <?php echo $_SESSION["ma_username"]; ?></i>
-            <li><i class="fas fa-sign-out-alt rgtspace-5"></i><a href="addetail.php?action=logout"> Log Out</a></li>
-            <?php } else { ?>
             <li><i class="fas fa-phone rgtspace-5"></i> 080-9907722</li>
             <li><i class="fas fa-envelope rgtspace-5"></i> info@pohjai.com</li>
-            <?php } ?>
           </ul>
         </div>
       </div>
@@ -65,72 +76,44 @@
     </div>
     <div class="wrapper row3">
       <section class="hoc container clear">
-        <div class="sectiontitle">
-          <h6 class="heading">ลิ้งแนะนำการขายโฆษณา</h6>
-        </div>
-        <center>
-          <input type="text" class="form-control" value="http://www.pohjai.com/pages/register.php?ref=<?php echo $_SESSION["ma_username"]; ?>" id="link" style="display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px; width: 600px;"><br>
-          <button class="btn" onclick="copy()" style="margin-top: 20;">คัดลอกลิ้งแนะนำ</button>
-        </center>
-        <div class="sectiontitle" style="margin-top: 70px;">
-          <h6 class="heading">รายการผู้ขายโฆษณาระดับที่ 1</h6>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>ชื่อผู้ใช้</th>
-              <th>ชื่อ-นามสกุล</th>
-              <th>อำเภอ</th>
-              <th>จังหวัด</th>
-              <th>เบอร์โทรศัพท์</th>
-              <th>อีเมล</th>
-              <th>อ้างอิง</th>
-              <th>จำนวนที่ขาย</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php while ($resultGetRef1 = mysql_fetch_array($queryGetRef1)) { ?>
-            <tr>
-              <td><?php echo $resultGetRef1["ma_username"]; ?></td>
-              <td><?php echo $resultGetRef1["ma_firstname"] . " " . $resultGetRef1["ma_lastname"]; ?></td>
-              <td><?php echo $resultGetRef1["ma_amphur"]; ?></td>
-              <td><?php echo $resultGetRef1["ma_province"]; ?></td>
-              <td><?php echo $resultGetRef1["ma_mobile"]; ?></td>
-              <td><?php echo $resultGetRef1["ma_email"]; ?></td>
-              <td><?php echo $resultGetRef1["ma_ref"]; ?></td>
-              <td><?php echo $resultGetRef1["ma_salefreq"]; ?></td>
-            </tr>
-            <?php } ?>
-          </tbody>
-        </table>
         <div class="sectiontitle" style="margin-top: 50px;">
-          <h6 class="heading">รายการผู้ขายโฆษณาระดับที่ 2</h6>
+          <h6 class="heading">เพิ่มร้านโฆษณา</h6>
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th>ชื่อผู้ใช้</th>
-              <th>ชื่อ-นามสกุล</th>
-              <th>อำเภอ</th>
-              <th>จังหวัด</th>
-              <th>อ้างอิง</th>
-              <th>จำนวนที่ขาย</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php while ($resultGetRef2 = mysql_fetch_array($queryGetRef2)) { ?>
-            <tr>
-              <td><?php echo $resultGetRef2["ma_username"]; ?></td>
-              <td><?php echo $resultGetRef2["ma_firstname"] . " " . $resultGetRef2["ma_lastname"]; ?></td>
-              <td><?php echo $resultGetRef2["ma_amphur"]; ?></td>
-              <td><?php echo $resultGetRef2["ma_province"]; ?></td>
-              <td><?php echo $resultGetRef2["ma_ref"]; ?></td>
-              <td><?php echo $resultGetRef2["ma_salefreq"]; ?></td>
-            </tr>
-            <?php } ?>
-          </tbody>
-        </table>
-      </section>
+        <form method="post" action="addowner.php?action=addowner">
+          <div style="margin-left: 50px;">
+            <div class="one_half first">
+              ชื่อร้าน :
+              <input type="text" name="oname" class="form-control" style="margin-left: 40px; display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px; width: 170px;"><br>
+            </div>
+            <div class="one_half">
+              ชื่อผู้ติดต่อ :
+              <input type="text" name="ocontact" class="form-control" style="margin-left: 64px; display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px; width: 170px;"><br>
+            </div>
+            <div class="one_half first" style="margin-top: 20px;">
+              ที่อยู่ :
+              <input type="text" name="oaddress" class="form-control" style="margin-left: 52px; display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px; width: 400px;"><br>
+            </div>
+            <div class="one_half" style="margin-top: 20px;">
+              จังหวัด :
+              <select name="oprovince" id="province" class="form-control" style="margin-left: 84px; display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px; width: 170px;">
+                <?php while ($resultGetProvince = mysql_fetch_array($queryGetProvince)) { ?>
+                <option value="<?php echo $resultGetProvince["PROVINCE_NAME"]; ?>"><?php echo $resultGetProvince["PROVINCE_NAME"]; ?></option>
+                <?php } ?>
+              </select>
+            </div>
+            <div class="one_half first" style="margin-top: 20px;">
+              เบอร์โทรศัพท์ :
+              <input type="text" name="omobile" class="form-control" style="display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px; width: 170px;"><br>
+            </div>
+            <div class="one_half" style="margin-top: 20px;">
+              Username ผู้ขายได้ :
+              <input type="text" name="omausername" class="form-control" style="display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px; width: 170px;"><br>
+            </div>
+          </div>
+          <center>
+          <input class="btn" type="submit" style="margin-top: 100px;" value="ตกลง">
+        </center>
+        </form>
     </div>
     <div class="wrapper row2">
       <footer id="footer" class="hoc clear">
@@ -162,12 +145,20 @@
     <script src="../layout/scripts/jquery.backtotop.js"></script>
     <script src="../layout/scripts/jquery.mobilemenu.js"></script>
     <script type="text/javascript">
-      function copy() {
-        var copyText = document.getElementById("link");
-        copyText.select();
-        document.execCommand("copy");
-        // alert("Copied the text: " + copyText.value);
-      }
+      $(function() {
+        $("#username").keypress(function(event) {
+          var ew = event.which;
+          if (ew == 32)
+            return true;
+          if (48 <= ew && ew <= 57)
+            return true;
+          if (65 <= ew && ew <= 90)
+            return true;
+          if (97 <= ew && ew <= 122)
+            return true;
+          return false;
+        });
+      });
     </script>
   </body>
 </html>

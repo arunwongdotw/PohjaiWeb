@@ -1,7 +1,7 @@
 <?php
   session_start();
-  include "../connect.php";
-  if ($_REQUEST["action"] == "add") {
+  include "../dbphp/connect.php";
+  if ($_REQUEST["action"] == "addfreq") {
     $username = $_REQUEST["username"];
     $freq = $_REQUEST["freq"];
     $sqlCheck = "SELECT * FROM memberAd WHERE ma_username = '$username'";
@@ -25,6 +25,8 @@
       echo "<script type='text/javascript'>alert('ไม่พบ Username นี้ในระบบ');</script>";
     }
   }
+  $sqlGetProvince = "SELECT * FROM province ORDER BY PROVINCE_ID";
+  $queryGetProvince = mysql_query($sqlGetProvince);
 ?>
 <html lang="">
   <!-- To declare your language - read more here: https://www.w3.org/International/questions/qa-html-language-declarations -->
@@ -73,7 +75,7 @@
         <div class="sectiontitle">
           <h6 class="heading">เพิ่มจำนวนการขายโฆษณา</h6>
         </div>
-        <form method="post" action="addfreq.php?action=add">
+        <form method="post" action="addfreq.php?action=addfreq">
           <div style="margin-left: 50px;">
             <div class="one_half first">
               ชื่อผู้ใช้ (Username) :
@@ -88,6 +90,7 @@
             <input class="btn" type="submit" style="margin-top: 50px;" value="ตกลง">
           </center>
         </form>
+      </section>
     </div>
     <div class="wrapper row2">
       <footer id="footer" class="hoc clear">

@@ -1,6 +1,6 @@
 <?php
   session_start();
-  include "../connect.php";
+  include "../dbphp/connect.php";
   if (!$_SESSION) {
     ?><script>window.location="../pages/login.php";</script><?php
   }
