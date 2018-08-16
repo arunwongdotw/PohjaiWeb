@@ -1,9 +1,11 @@
 <?php
   session_start();
   include "../dbphp/connect.php";
+
   if ($_SESSION["type"] == "ad") {
     ?><script>window.location="../pages/addetail.php";</script><?php
   }
+
   if ($_REQUEST["action"] == "adlogin") {
     $username = $_REQUEST["username"];
     $password = $_REQUEST["password"];
@@ -73,8 +75,10 @@
         </div>
         <center>
           <form method="post" action="adlogin.php?action=adlogin">
-            ชื่อผู้ใช้ (Username) : <input type="text" class="form-control" name="username" style="border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px;" required><br>
-            รหัสผ่าน (Password) : <input type="password" class="form-control" name="password" style="border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px;" required><br>
+            ชื่อผู้ใช้ (Username) :
+            <input type="text" class="form-control" name="username" style="border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px;" required><br>
+            รหัสผ่าน (Password) :
+            <input type="password" class="form-control" name="password" style="border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px;" required><br>
             <input class="btn" type="submit" value="ตกลง">
           </form>
         </center>
@@ -84,7 +88,6 @@
       <footer id="footer" class="hoc clear">
         <div class="one_third first">
           <h1 class="logoname"><span>Pohjai</span> พอใจ</h1>
-          <!-- <p class="btmspace-30">Sem nam et erat nec eros elementum gravida proin bibendum diam sed congue sagittis metus risus rutrum mauris sed euismod nisl purus vel leo phasellus nunc erat cursus aliquet [<a href="#">&hellip;</a>]</p> -->
           <p class="btmspace-30">แอปพลิเคชันพอใจ เป็นแอปพลิเคชันประเมินความพึงพอใจของลูกค้าหรือผู้ได้รับบริการจากที่ต่างๆ ให้สามารถประเมินความพึงพอใจได้
             สามารถตั้งค่าการใช้งานได้หลากหลายตามความต้องการของผู้ใช้งาน นอกจากนี้ยังมีการแสดงผลแบบกราฟ ซึ่งจะช่วยทำให้ท่านดูผลได้เข้าใจง่ายยิ่งขึ้น</p>
           <!-- <ul class="faico clear">

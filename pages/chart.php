@@ -1,14 +1,17 @@
 <?php
   session_start();
   include "../dbphp/connect.php";
+
   if (!$_SESSION) {
     ?><script>window.location="../pages/login.php";</script><?php
   }
+
   if ($_REQUEST["action"] == "logout") {
     session_destroy();
     echo "<script type='text/javascript'>alert('Log Out สำเร็จ');</script>";
     ?><script>window.location="../index.html";</script><?php
   }
+
   if (!$_REQUEST["questionsetid"]) {
     ?><script>window.location="../pages/member.php";</script><?php
   } else {
@@ -401,6 +404,7 @@
       $queryGetQuestionSetNoBtn = mysql_query($sqlGetQuestionSetNoBtn);
       $resultGetQuestionSetNoBtn = mysql_fetch_array($queryGetQuestionSetNoBtn);
       $noBtn = $resultGetQuestionSetNoBtn["question_set_number_btn"];
+      $commentFlag = $resultGetQuestionSetNoBtn["question_set_comment"];
       $sqlGetQuestionInQuestionSet = "SELECT * FROM question WHERE question_question_set_id = '$questionsetid' ORDER BY question_id";
       $queryGetQuestionInQuestionSet = mysql_query($sqlGetQuestionInQuestionSet);
       $sqlCountScoreInQuestionSet = "SELECT count(score_value) as countvalue, s.score_value FROM score s, question q, questionSet qs WHERE qs.question_set_id = '$questionsetid'
@@ -1105,7 +1109,7 @@
             <center>
               <label style="font-family: arial; font-size: 32px; font-weight: bold;">รายชื่อผู้ทำแบบสอบถามความพึงพอใจ :</label><br><br>
               <input type="hidden" name="questionsetid" value="<?php echo $questionsetid; ?>">
-              <input type="hidden" name="name" value="1">
+              <input type="hidden" name="name" value="name">
               <input type="hidden" name="startdatetime" value="<?php echo $startdatetime; ?>">
               <input type="hidden" name="enddatetime" value="<?php echo $enddatetime; ?>">
               <input type="submit" name="chart" class="btn" value="ดูรายชื่อผู้ทำแบบสอบถามความพึงพอใจ"><br><br><br><br>
@@ -1126,6 +1130,7 @@
               <center>
                 <label style="font-family: arial; font-size: 32px; font-weight: bold;">คำถาม : <?php echo $resultGetBasicQuestion["bq_question"]; ?></label><br><br>
                 <input type="hidden" name="questionsetid" value="<?php echo $questionsetid; ?>">
+                <input type="hidden" name="name" value="question">
                 <input type="hidden" name="ansbqid" value="<?php echo $resultGetBasicQuestion["bq_id"]; ?>">
                 <input type="hidden" name="startdatetime" value="<?php echo $startdatetime; ?>">
                 <input type="hidden" name="enddatetime" value="<?php echo $enddatetime; ?>">
@@ -1145,6 +1150,18 @@
           <div id="chart<?php echo $resultGetQuestionInQuestionSet["question_id"]; ?>" style="height: 370px; width: 100%;"></div><br><br>
           <?php } ?>
           <div id="chart<?php echo $questionsetid; ?>" style="height: 370px; width: 100%;"></div><br><br>
+          <?php if ($commentFlag == "1") { ?>
+            <form action="alllist.php" method="POST">
+              <center>
+                <label style="font-family: arial; font-size: 32px; font-weight: bold;">ข้อเสนอแนะ</label><br><br>
+                <input type="hidden" name="questionsetid" value="<?php echo $questionsetid; ?>">
+                <input type="hidden" name="name" value="comment">
+                <input type="hidden" name="startdatetime" value="<?php echo $startdatetime; ?>">
+                <input type="hidden" name="enddatetime" value="<?php echo $enddatetime; ?>">
+                <input type="submit" name="comment" class="btn" value="ดูข้อเสนอแนะของผู้ทำแบบสอบถามความพึงพอใจ"><br><br><br><br>
+              </center>
+            </form>
+          <?php } ?>
         <?php } ?>
       </section>
     </div>

@@ -1,6 +1,7 @@
 <?php
   session_start();
   include "../dbphp/connect.php";
+
   if ($_REQUEST["action"] == "addfreq") {
     $username = $_REQUEST["username"];
     $freq = $_REQUEST["freq"];
@@ -25,6 +26,7 @@
       echo "<script type='text/javascript'>alert('ไม่พบ Username นี้ในระบบ');</script>";
     }
   }
+
   $sqlGetProvince = "SELECT * FROM province ORDER BY PROVINCE_ID";
   $queryGetProvince = mysql_query($sqlGetProvince);
 ?>
@@ -79,11 +81,13 @@
           <div style="margin-left: 50px;">
             <div class="one_half first">
               ชื่อผู้ใช้ (Username) :
-              <input type="text" name="username" id="username" class="form-control" style="display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px;"><br>
+              <input type="text" class="form-control" name="username" id="username" style="display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;
+              padding: 12px 20px;"><br>
             </div>
             <div class="one_half">
               จำนวนการขายโฆษณา :
-              <input type="number" name="freq" id="freq" class="form-control" style="display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px;"><br>
+              <input type="number" class="form-control" name="freq" id="freq" style="display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;
+              padding: 12px 20px;"><br>
             </div>
           </div>
           <center>
@@ -96,7 +100,6 @@
       <footer id="footer" class="hoc clear">
         <div class="one_third first">
           <h1 class="logoname"><span>Pohjai</span> พอใจ</h1>
-          <!-- <p class="btmspace-30">Sem nam et erat nec eros elementum gravida proin bibendum diam sed congue sagittis metus risus rutrum mauris sed euismod nisl purus vel leo phasellus nunc erat cursus aliquet [<a href="#">&hellip;</a>]</p> -->
           <p class="btmspace-30">แอปพลิเคชันพอใจ เป็นแอปพลิเคชันประเมินความพึงพอใจของลูกค้าหรือผู้ได้รับบริการจากที่ต่างๆ ให้สามารถประเมินความพึงพอใจได้
             สามารถตั้งค่าการใช้งานได้หลากหลายตามความต้องการของผู้ใช้งาน นอกจากนี้ยังมีการแสดงผลแบบกราฟ ซึ่งจะช่วยทำให้ท่านดูผลได้เข้าใจง่ายยิ่งขึ้น</p>
           <!-- <ul class="faico clear">
@@ -141,7 +144,6 @@
         var copyText = document.getElementById("link");
         copyText.select();
         document.execCommand("copy");
-        // alert("Copied the text: " + copyText.value);
       }
     </script>
   </body>

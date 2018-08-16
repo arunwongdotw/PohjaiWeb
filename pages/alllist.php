@@ -1,25 +1,28 @@
 <?php
   session_start();
   include "../dbphp/connect.php";
+
   if (!$_SESSION) {
     ?><script>window.location="../pages/member.php";</script><?php
   }
+
   if ($_REQUEST["action"] == "logout") {
     session_destroy();
     echo "<script type='text/javascript'>alert('Log Out สำเร็จ');</script>";
     ?><script>window.location="../index.html";</script><?php
   }
+
   if (!$_REQUEST["questionsetid"]) {
     ?><script>window.location="../pages/member.php";</script><?php
   } else {
-    if ($_REQUEST["name"]) {
+    if ($_REQUEST["name"] == "name") {
       $nameflag = 1;
       $questionsetid = $_REQUEST["questionsetid"];
       $startdatetime = $_REQUEST["startdatetime"];
       $enddatetime = $_REQUEST["enddatetime"];
       $sqlGetList = "SELECT * FROM info WHERE info_question_set_id = '$questionsetid' AND info_datetime >= '$startdatetime' AND info_datetime <= '$enddatetime' ORDER BY info_id";
       $queryGetList = mysql_query($sqlGetList);
-    } else {
+    } else if ($_REQUEST["name"] == "question") {
       $nameflag = 0;
       $questionsetid = $_REQUEST["questionsetid"];
       $ansbqid = $_REQUEST["ansbqid"];
@@ -27,6 +30,13 @@
       $enddatetime = $_REQUEST["enddatetime"];
       $sqlGetList = "SELECT * FROM answer a, info i WHERE a.ans_bq_id = '$ansbqid' AND i.info_datetime >= '$startdatetime' AND i.info_datetime <= '$enddatetime'
                     AND a.ans_info_id = i.info_id  ORDER BY i.info_datetime";
+      $queryGetList = mysql_query($sqlGetList);
+    } else {
+      $nameflag = 2;
+      $questionsetid = $_REQUEST["questionsetid"];
+      $ansbqid = $_REQUEST["ansbqid"];
+      $startdatetime = $_REQUEST["startdatetime"];
+      $sqlGetList = "SELECT * FROM comment WHERE comment_question_set_id = '$questionsetid' ORDER BY comment_datetime";
       $queryGetList = mysql_query($sqlGetList);
     }
   }
@@ -89,7 +99,7 @@
           <?php echo $i . ". " . $resultGetList["info_name"] . "<br>"; ?>
           <?php $i++; ?>
         <?php } ?>
-        <?php } else { ?>
+      <?php } else if ($nameflag == 0) { ?>
         <div class="sectiontitle">
           <h6 class="heading">คำตอบของผู้ทำแบบสอบถามความพึงพอใจ</h6>
         </div>
@@ -98,14 +108,22 @@
           <?php echo $i . ". " . $resultGetList["ans_answer"] . "<br>"; ?>
           <?php $i++; ?>
         <?php } ?>
+      <?php } else { ?>
+        <div class="sectiontitle">
+          <h6 class="heading">ข้อเสนอแนะของผู้ทำแบบสอบถามความพึงพอใจ</h6>
+        </div>
+        <?php $i = 1;?>
+        <?php while ($resultGetList = mysql_fetch_array($queryGetList)) { ?>
+          <?php echo $i . ". " . $resultGetList["comment_detail"] . "<br>"; ?>
+          <?php $i++; ?>
         <?php } ?>
+      <?php } ?>
       </section>
     </div>
     <div class="wrapper row2">
       <footer id="footer" class="hoc clear">
         <div class="one_third first">
           <h1 class="logoname"><span>Pohjai</span> พอใจ</h1>
-          <!-- <p class="btmspace-30">Sem nam et erat nec eros elementum gravida proin bibendum diam sed congue sagittis metus risus rutrum mauris sed euismod nisl purus vel leo phasellus nunc erat cursus aliquet [<a href="#">&hellip;</a>]</p> -->
           <p class="btmspace-30">แอปพลิเคชันพอใจ เป็นแอปพลิเคชันประเมินความพึงพอใจของลูกค้าหรือผู้ได้รับบริการจากที่ต่างๆ ให้สามารถประเมินความพึงพอใจได้
             สามารถตั้งค่าการใช้งานได้หลากหลายตามความต้องการของผู้ใช้งาน นอกจากนี้ยังมีการแสดงผลแบบกราฟ ซึ่งจะช่วยทำให้ท่านดูผลได้เข้าใจง่ายยิ่งขึ้น</p>
           <!-- <ul class="faico clear">

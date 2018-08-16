@@ -1,6 +1,7 @@
 <?php
   session_start();
   include "../dbphp/connect.php";
+
   if ($_REQUEST["action"] == "addowner") {
     $name = $_REQUEST["oname"];
     $contact = $_REQUEST["ocontact"];
@@ -29,6 +30,7 @@
       echo "<script type='text/javascript'>alert('ไม่พบ Username นี้ในระบบ');</script>";
     }
   }
+
   $sqlGetProvince = "SELECT * FROM province ORDER BY PROVINCE_ID";
   $queryGetProvince = mysql_query($sqlGetProvince);
 ?>
@@ -83,19 +85,23 @@
           <div style="margin-left: 50px;">
             <div class="one_half first">
               ชื่อร้าน :
-              <input type="text" name="oname" class="form-control" style="margin-left: 40px; display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px; width: 170px;"><br>
+              <input type="text" class="form-control" name="oname" style="margin-left: 40px; display: inline; border-radius: 4px; border: 1px solid #ccc;
+              box-sizing: border-box; padding: 12px 20px; width: 170px;"><br>
             </div>
             <div class="one_half">
               ชื่อผู้ติดต่อ :
-              <input type="text" name="ocontact" class="form-control" style="margin-left: 64px; display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px; width: 170px;"><br>
+              <input type="text" class="form-control" name="ocontact" style="margin-left: 64px; display: inline; border-radius: 4px; border: 1px solid #ccc;
+              box-sizing: border-box; padding: 12px 20px; width: 170px;"><br>
             </div>
             <div class="one_half first" style="margin-top: 20px;">
               ที่อยู่ :
-              <input type="text" name="oaddress" class="form-control" style="margin-left: 52px; display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px; width: 400px;"><br>
+              <input type="text" class="form-control" name="oaddress" style="margin-left: 52px; display: inline; border-radius: 4px; border: 1px solid #ccc;
+              box-sizing: border-box; padding: 12px 20px; width: 400px;"><br>
             </div>
             <div class="one_half" style="margin-top: 20px;">
               จังหวัด :
-              <select name="oprovince" id="province" class="form-control" style="margin-left: 84px; display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px; width: 170px;">
+              <select class="form-control" name="oprovince" id="province" style="margin-left: 84px; display: inline; border-radius: 4px; border: 1px solid #ccc;
+              box-sizing: border-box; padding: 12px 20px; width: 170px;">
                 <?php while ($resultGetProvince = mysql_fetch_array($queryGetProvince)) { ?>
                 <option value="<?php echo $resultGetProvince["PROVINCE_NAME"]; ?>"><?php echo $resultGetProvince["PROVINCE_NAME"]; ?></option>
                 <?php } ?>
@@ -103,11 +109,13 @@
             </div>
             <div class="one_half first" style="margin-top: 20px;">
               เบอร์โทรศัพท์ :
-              <input type="text" name="omobile" class="form-control" style="display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px; width: 170px;"><br>
+              <input type="text" class="form-control" name="omobile" style="display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;
+              padding: 12px 20px; width: 170px;"><br>
             </div>
             <div class="one_half" style="margin-top: 20px;">
               Username ผู้ขายได้ :
-              <input type="text" name="omausername" class="form-control" style="display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px; width: 170px;"><br>
+              <input type="text" class="form-control" name="omausername" style="display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;
+              padding: 12px 20px; width: 170px;"><br>
             </div>
           </div>
           <center>
@@ -120,7 +128,6 @@
       <footer id="footer" class="hoc clear">
         <div class="one_third first">
           <h1 class="logoname"><span>Pohjai</span> พอใจ</h1>
-          <!-- <p class="btmspace-30">Sem nam et erat nec eros elementum gravida proin bibendum diam sed congue sagittis metus risus rutrum mauris sed euismod nisl purus vel leo phasellus nunc erat cursus aliquet [<a href="#">&hellip;</a>]</p> -->
           <p class="btmspace-30">แอปพลิเคชันพอใจ เป็นแอปพลิเคชันประเมินความพึงพอใจของลูกค้าหรือผู้ได้รับบริการจากที่ต่างๆ ให้สามารถประเมินความพึงพอใจได้
             สามารถตั้งค่าการใช้งานได้หลากหลายตามความต้องการของผู้ใช้งาน นอกจากนี้ยังมีการแสดงผลแบบกราฟ ซึ่งจะช่วยทำให้ท่านดูผลได้เข้าใจง่ายยิ่งขึ้น</p>
           <!-- <ul class="faico clear">

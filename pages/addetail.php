@@ -1,6 +1,7 @@
 <?php
   session_start();
   include "../dbphp/connect.php";
+
   if ($_SESSION["type"] != "ad") {
     ?><script>window.location="../pages/adlogin.php";</script><?php
   } else {
@@ -10,6 +11,7 @@
     $sqlGetRef2 = "SELECT * FROM memberAd WHERE ma_ref IN (SELECT ma_username FROM memberAd WHERE ma_ref = '$ref')";
     $queryGetRef2 = mysql_query($sqlGetRef2);
   }
+
   if ($_REQUEST["action"] == "logout") {
     session_destroy();
     echo "<script type='text/javascript'>alert('Log Out สำเร็จ');</script>";
@@ -69,7 +71,8 @@
           <h6 class="heading">ลิ้งแนะนำการขายโฆษณา</h6>
         </div>
         <center>
-          <input type="text" class="form-control" value="http://www.pohjai.com/pages/register.php?ref=<?php echo $_SESSION["ma_username"]; ?>" id="link" style="display: inline; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px; width: 600px;"><br>
+          <input type="text" class="form-control" id="link" value="http://www.pohjai.com/pages/register.php?ref=<?php echo $_SESSION["ma_username"]; ?>" style="display: inline;
+          border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; padding: 12px 20px; width: 600px;"><br>
           <button class="btn" onclick="copy()" style="margin-top: 20;">คัดลอกลิ้งแนะนำ</button>
         </center>
         <div class="sectiontitle" style="margin-top: 70px;">
@@ -136,7 +139,6 @@
       <footer id="footer" class="hoc clear">
         <div class="one_third first">
           <h1 class="logoname"><span>Pohjai</span> พอใจ</h1>
-          <!-- <p class="btmspace-30">Sem nam et erat nec eros elementum gravida proin bibendum diam sed congue sagittis metus risus rutrum mauris sed euismod nisl purus vel leo phasellus nunc erat cursus aliquet [<a href="#">&hellip;</a>]</p> -->
           <p class="btmspace-30">แอปพลิเคชันพอใจ เป็นแอปพลิเคชันประเมินความพึงพอใจของลูกค้าหรือผู้ได้รับบริการจากที่ต่างๆ ให้สามารถประเมินความพึงพอใจได้
             สามารถตั้งค่าการใช้งานได้หลากหลายตามความต้องการของผู้ใช้งาน นอกจากนี้ยังมีการแสดงผลแบบกราฟ ซึ่งจะช่วยทำให้ท่านดูผลได้เข้าใจง่ายยิ่งขึ้น</p>
           <!-- <ul class="faico clear">
@@ -166,7 +168,6 @@
         var copyText = document.getElementById("link");
         copyText.select();
         document.execCommand("copy");
-        // alert("Copied the text: " + copyText.value);
       }
     </script>
   </body>
