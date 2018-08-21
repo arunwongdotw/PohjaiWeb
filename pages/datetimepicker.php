@@ -70,9 +70,10 @@
     <div class="wrapper row1">
       <section class="hoc container clear">
         <div class="sectiontitle">
-          <h6 class="heading">ตั้งค่ากราฟ</h6>
+          <h6 class="heading">ตั้งค่ารายงาน</h6>
         </div>
         <center>
+          <!-- <form action="chart.php" method="POST"> -->
           <form action="chart.php" method="POST">
             <input type="hidden" name="questionsetid" value="<?php echo $questionsetid; ?>">
             ประเภทกราฟ :<br><br>
@@ -87,12 +88,19 @@
               <option value="1">ข้อมูลจากแบบประเมินความพึงพอใจ</option>
               <option value="2">ข้อมูลจากแบบสอบถามเบื้องต้น</option>
             </select><br>
-            <?php } ?>
+          <?php } else { ?>
+            ข้อมูลที่ใช้สร้างกราฟ :<br><br>
+            <select class="form-control" id="chartdata" name="chartdata">
+              <option value="1">ข้อมูลจากแบบประเมินความพึงพอใจ</option>
+            </select><br>
+          <?php } ?>
             เลือกวันและเวลาเริ่มต้นข้อมูล :<br><br>
             <input type="datetime-local" name="startdatetime" value="<?php echo $date; ?>T00:00"><br>
             เลือกวันและเวลาสิ้นสุดข้อมูล :<br><br>
             <input type="datetime-local" name="enddatetime" value="<?php echo $date; ?>T00:00"><br>
-            <input type="submit" class="btn" value="ดูกราฟ">
+            <!-- <input type="submit" class="btn" value="ดูกราฟ"> -->
+            <input type="button" class="btn" value="ดูกราฟ" onClick="this.form.action='chart.php'; submit()"><br><br>
+            <input type="button" class="btn" value="Export Excel" onClick="this.form.action='export2.php'; submit()">
           </form>
         </center>
       </section>

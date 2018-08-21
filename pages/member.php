@@ -83,7 +83,7 @@
               <form action="datetimepicker.php" method="POST">
                 <input type="hidden" name="questionsetid" value="<?php echo $resultGetQuestionSet["question_set_id"]; ?>">
                 <!-- <td><center><a class="btn" href="#">ดูกราฟ</a></center></td> -->
-                <td><center><input type="submit" name="chart" class="btn" value="ดูกราฟ"></center></td>
+                <td><center><input type="submit" name="chart" class="btn" value="ดูรายงาน"></center></td>
               </form>
             </tr>
             <?php } ?>
