@@ -100,7 +100,8 @@
             <input type="datetime-local" name="enddatetime" value="<?php echo $date; ?>T00:00"><br>
             <!-- <input type="submit" class="btn" value="ดูกราฟ"> -->
             <input type="button" class="btn" value="ดูกราฟ" onClick="this.form.action='chart.php'; submit()"><br><br>
-            <input type="button" class="btn" value="Export Excel" onClick="this.form.action='export2.php'; submit()">
+            <input type="button" class="btn" value="Export Excel แบบรวมวัน" onClick="this.form.action='export2.php'; submit()">
+            <input type="button" class="btn" value="Export Excel แบบแยกวัน" onClick="this.form.action='export4.php'; submit()">
           </form>
         </center>
       </section>
